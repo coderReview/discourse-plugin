@@ -29,7 +29,7 @@
       webAuth = new auth0.WebAuth({
         domain: domain,
         clientID: client_id,
-        scope: 'profile email',
+        scope: 'openid email profile',
         responseType: 'token id_token',
         audience: Discourse.SiteSettings.auth0_audience,
         redirectUri: Discourse.SiteSettings.auth0_callback_url

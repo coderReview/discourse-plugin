@@ -51,6 +51,7 @@ class Auth0Authenticator < ::Auth::OAuth2Authenticator
             strategy.options[:client_id] = SiteSetting.auth0_client_id
             strategy.options[:client_secret] = SiteSetting.auth0_client_secret
             strategy.options[:connection] = SiteSetting.auth0_connection
+            strategy.options[:audience] = SiteSetting.auth0_audience
 
             domain = SiteSetting.auth0_domain
 
