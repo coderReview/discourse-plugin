@@ -30,7 +30,7 @@
         domain: domain,
         clientID: client_id,
         scope: 'openid email profile',
-        responseType: 'code token id_token',
+        responseType: 'code',
         audience: Discourse.SiteSettings.auth0_audience,
         redirectUri: Discourse.SiteSettings.auth0_callback_url
       });
