@@ -39,6 +39,9 @@
         redirectUri: Discourse.SiteSettings.auth0_silent_redirect_uri,
         postMessageDataType: 'brewperfect-type',
         usePostMessage: true
+      }, function(err, authToken) {
+        console.log(err);
+        console.log(authToken);
       });
 
     }, 300);
