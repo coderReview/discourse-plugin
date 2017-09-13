@@ -7,9 +7,9 @@
     document.head.appendChild(new_script);
   }
 
-  var lock;
+  var webAuth;
 
-  var script_url = '//cdn.auth0.com/js/lock-9.2.js';
+  var script_url = '//cdn.auth0.com/js/auth0/8.8/auth0.min.js';
 
   appendScript(script_url, function () {
     var checkInterval = setInterval(function () {
@@ -19,14 +19,27 @@
 
       clearInterval(checkInterval);
 
-      if (!Discourse.SiteSettings.auth0_client_id) {
+      if (!Discourse.SiteSettings.auth0_new_client_id) {
         return;
       }
 
-      var client_id = Discourse.SiteSettings.auth0_client_id;
-      var domain = Discourse.SiteSettings.auth0_domain;
+      var client_id = Discourse.SiteSettings.auth0_new_client_id;
+      var domain = Discourse.SiteSettings.auth0_new_domain;
 
-      lock = new Auth0Lock(client_id, domain);
+      webAuth = new auth0.WebAuth({
+        domain: domain,
+        clientID: client_id,
+        scope: 'profile email',
+        responseType: 'token id_token',
+        audience: Discourse.SiteSettings.auth0_new_audience,
+        redirectUri: Discourse.SiteSettings.auth0_new_callback_url
+      });
+
+      webAuth.renewAuth({
+        redirectUri: Discourse.SiteSettings.auth0_new_silent_redirect_uri,
+        postMessageDataType: 'brewperfect-type',
+        usePostMessage: true
+      });
 
     }, 300);
   });
@@ -34,9 +47,6 @@
   var LoginController = require('discourse/controllers/login').default;
   LoginController.reopen({
     authenticationComplete: function () {
-      if (lock) {
-        lock.hide();
-      }
       return this._super.apply(this, arguments);
     }
   });
@@ -45,39 +55,23 @@
   ApplicationRoute.reopen({
     actions: {
       showLogin: function() {
-        if (!Discourse.SiteSettings.auth0_client_id || Discourse.SiteSettings.auth0_connection !== '') {
+        if (!Discourse.SiteSettings.auth0_new_client_id || Discourse.SiteSettings.auth0_new_connection !== '') {
           return this._super();
         }
 
-        lock.show({
-          popup:        true,
-          responseType: 'code',
-          callbackURL:  Discourse.SiteSettings.auth0_callback_url
-        });
-
-        this.controllerFor('login').resetForm();
+        webAuth.authorize();
       },
       showCreateAccount: function () {
-        if (!Discourse.SiteSettings.auth0_client_id || Discourse.SiteSettings.auth0_connection !== '') {
+        if (!Discourse.SiteSettings.auth0_new_client_id || Discourse.SiteSettings.auth0_new_connection !== '') {
           return this._super();
         }
 
         var createAccountController = Discourse.__container__.lookup('controller:createAccount');
 
         if (createAccountController && createAccountController.accountEmail) {
-          if (lock) {
-            lock.hide();
-            Discourse.Route.showModal(this, 'createAccount');
-          } else {
-            this._super();
-          }
+          this._super();
         } else {
-          lock.show({
-            mode:         'signup',
-            popup:        true,
-            responseType: 'code',
-            callbackURL:  Discourse.SiteSettings.auth0_callback_url
-          });
+          webAuth.authorize();
         }
       }
     }

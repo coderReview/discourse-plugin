@@ -1,20 +1,28 @@
-auth0:
-  auth0_domain:
+auth0_new:
+  auth0_new_domain:
     client: true
     default: 'YOUR-AUTH0-ACCOUNT.auth0.com'
     shadowed_by_global: true
-  auth0_client_id:
+  auth0_new_client_id:
     client: true
     default: ''
     shadowed_by_global: true
-  auth0_client_secret:
+  auth0_new_client_secret:
     default: ''
     shadowed_by_global: true
-  auth0_callback_url:
+  auth0_new_callback_url:
     client: true
     default: 'http://your-discourse-url.com/auth/auth0/callback'
     shadowed_by_global: true
-  auth0_connection:
+  auth0_new_audience:
+    client: true
+    default: ''
+    shadowed_by_global: true
+  auth0_new_silent_redirect_uri:
+    client: true
+    default: ''
+    shadowed_by_global: true
+  auth0_new_connection:
     client: true
     default: ''
     shadowed_by_global: true
