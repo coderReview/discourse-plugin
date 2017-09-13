@@ -1,4 +1,4 @@
-# name: auth0_new
+# name: auth0
 # about: Authenticate with auth0
 # version: 3.0.0
 # authors: Jose Romaniello, Paulo Vitor Magacho

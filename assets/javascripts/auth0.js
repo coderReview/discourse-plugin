@@ -19,24 +19,24 @@
 
       clearInterval(checkInterval);
 
-      if (!Discourse.SiteSettings.auth0_new_client_id) {
+      if (!Discourse.SiteSettings.auth0_client_id) {
         return;
       }
 
-      var client_id = Discourse.SiteSettings.auth0_new_client_id;
-      var domain = Discourse.SiteSettings.auth0_new_domain;
+      var client_id = Discourse.SiteSettings.auth0_client_id;
+      var domain = Discourse.SiteSettings.auth0_domain;
 
       webAuth = new auth0.WebAuth({
         domain: domain,
         clientID: client_id,
         scope: 'profile email',
         responseType: 'token id_token',
-        audience: Discourse.SiteSettings.auth0_new_audience,
-        redirectUri: Discourse.SiteSettings.auth0_new_callback_url
+        audience: Discourse.SiteSettings.auth0_audience,
+        redirectUri: Discourse.SiteSettings.auth0_callback_url
       });
 
       webAuth.renewAuth({
-        redirectUri: Discourse.SiteSettings.auth0_new_silent_redirect_uri,
+        redirectUri: Discourse.SiteSettings.auth0_silent_redirect_uri,
         postMessageDataType: 'brewperfect-type',
         usePostMessage: true
       });
@@ -55,14 +55,14 @@
   ApplicationRoute.reopen({
     actions: {
       showLogin: function() {
-        if (!Discourse.SiteSettings.auth0_new_client_id || Discourse.SiteSettings.auth0_new_connection !== '') {
+        if (!Discourse.SiteSettings.auth0_client_id || Discourse.SiteSettings.auth0_connection !== '') {
           return this._super();
         }
 
         webAuth.authorize();
       },
       showCreateAccount: function () {
-        if (!Discourse.SiteSettings.auth0_new_client_id || Discourse.SiteSettings.auth0_new_connection !== '') {
+        if (!Discourse.SiteSettings.auth0_client_id || Discourse.SiteSettings.auth0_connection !== '') {
           return this._super();
         }
 
