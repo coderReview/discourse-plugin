@@ -14,7 +14,7 @@ class Auth0Authenticator < ::Auth::OAuth2Authenticator
 
     result = Auth::Result.new
 
-    oauth2_uid = auth_token[:uid]
+    oauth2_uid = raw_info[:uid]
     data = auth_token[:info]
     result.email = email = data[:email]
     result.name = name = data[:name]
@@ -86,7 +86,7 @@ class OmniAuth::Strategies::Auth0 < OmniAuth::Strategies::OAuth2
     end
   end
 
-  uid { raw_info["user_id"] }
+  uid { raw_info["sub"] }
 
   extra do
     { :raw_info => raw_info }

@@ -38,6 +38,7 @@
       webAuth.renewAuth({
         redirectUri: Discourse.SiteSettings.auth0_silent_redirect_uri,
         postMessageDataType: 'brewperfect-type',
+        responseType: 'token id_token',
         usePostMessage: true
       }, function(err, authToken) {
         console.log(err);
