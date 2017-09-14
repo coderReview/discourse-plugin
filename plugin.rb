@@ -14,7 +14,7 @@ class Auth0Authenticator < ::Auth::OAuth2Authenticator
 
     result = Auth::Result.new
 
-    oauth2_uid = raw_info[:uid]
+    oauth2_uid = auth_token[:uid]
     data = auth_token[:info]
     result.email = email = data[:email]
     result.name = name = data[:name]
